@@ -195,12 +195,17 @@ Gluu allows two types of pairwise implementations that can be configured:
 `dn: ou=pairwiseIdentifiers,inum=PEOPLE_INUM,ou=people,o=ORG_INUM,o=gluu`
 
 1. `PairwiseIdType.ALGORITHMIC`: The sub value is calculated as follows:
-`sub = base64urlencode(HS256Signature(sectorIdentifier + userInum + salt, key))`
+`sub = base64urlencode(HS256Signature(sectorIdentifier + local_account_id + salt, key))`
 
 Key and salt are read from oxAuth configuration entries `pairwiseCalculationKey` and `pairwiseCalculationSalt`:
 
 ![Pairwise Algorithmic configuration](../img/admin-guide/openid/pairwiseconfiguration.png)
 
+The local_account_id is calculated as follows:
+
+1. `"shareSubjectIdBetweenClientsWithSameSectorId": false`: The local account id calculation is taking in account the User ID and the Client ID, so there will be no correlation in the Subject ID with different clients with the same Sector Identifier.
+
+1. `"shareSubjectIdBetweenClientsWithSameSectorId": true`: The local account id calculation is taking in account only the User ID, so the Subject ID will be shared between clients with the same Sector Identifier.
 
 ### Add Sector Identifier
 
